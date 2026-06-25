@@ -46,6 +46,11 @@ const VIDEO_URLS: Record<string, string> = {
   the_opposer:     CDN_V + "hf_20260625_141450_a7e73404-1f01-47a2-b1fb-35490b2f8f21.mp4",
   dangote_aliko:   CDN_V + "hf_20260625_141454_38c14b56-81a3-4017-844b-57acef3838f5.mp4",
   arnault_bernard: CDN_V + "hf_20260625_141539_606b0418-7fb0-4644-bed7-a22d8ea1a69a.mp4",
+  branson_richard: CDN_V + "hf_20260625_141543_d2abbf5e-536c-43de-a632-9b46acf2acf0.mp4",
+  nadella_satya:   CDN_V + "hf_20260625_141629_3863e171-f1b0-4008-955e-8a68eb0bf464.mp4",
+  ambani_mukesh:   CDN_V + "hf_20260625_141634_7248acbd-ea84-4d8d-9bc0-788fb4ac62b5.mp4",
+  murthy_narayana: CDN_V + "hf_20260625_141648_13a5d65e-32f1-44c2-a96b-8e49613f9883.mp4",
+  elumelu_tony:    CDN_V + "hf_20260625_141702_c6f41335-b25f-44c0-a47f-3db57062b9ca.mp4",
 };
 
 export default function DirectorCard({ director, response, loading, index }: Props) {
