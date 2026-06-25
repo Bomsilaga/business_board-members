@@ -11,30 +11,47 @@ interface Props {
   index: number;
 }
 
+const CDN = "https://d8j0ntlcm91z4.cloudfront.net/user_3Ch4M6H25WVlp2HD1Qf0bakU3iW/";
+
+// AI-generated cinematic portraits (Higgsfield soul_cast)
 const AVATAR_URLS: Record<string, string> = {
-  dangote_aliko: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Aliko_Dangote_2014_%28cropped%29.jpg/440px-Aliko_Dangote_2014_%28cropped%29.jpg",
-  elumelu_tony: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Tony_Elumelu_%28cropped%29.jpg/440px-Tony_Elumelu_%28cropped%29.jpg",
-  ovia_jim: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Jim_Ovia.jpg/440px-Jim_Ovia.jpg",
-  rabiu_abdulsamad: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Abdulsamad_Rabiu.jpg/440px-Abdulsamad_Rabiu.jpg",
-  maduka_cosmas: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Cosmas_Maduka.jpg/440px-Cosmas_Maduka.jpg",
-  rinehart_gina: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Gina_Rinehart_2013_%28cropped%29.jpg/440px-Gina_Rinehart_2013_%28cropped%29.jpg",
-  lowy_frank: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Frank_Lowy_%28cropped%29.jpg/440px-Frank_Lowy_%28cropped%29.jpg",
-  musk_elon: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Elon_Musk_Royal_Society_%28crop2%29.jpg/440px-Elon_Musk_Royal_Society_%28crop2%29.jpg",
-  gates_bill: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Bill_Gates_2018.jpg/440px-Bill_Gates_2018.jpg",
-  nadella_satya: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/MS-Exec-Nadella-Satya-2017-08-31-22_%28cropped%29.jpg/440px-MS-Exec-Nadella-Satya-2017-08-31-22_%28cropped%29.jpg",
-  arnault_bernard: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Bernard_Arnault_%283%29_%28cropped%29.jpg/440px-Bernard_Arnault_%283%29_%28cropped%29.jpg",
-  branson_richard: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Richard_Branson_Space_Shuttle_cropped.jpg/440px-Richard_Branson_Space_Shuttle_cropped.jpg",
-  murthy_narayana: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/N._R._Narayana_Murthy_at_IIT_Bombay_Techfest.jpg/440px-N._R._Narayana_Murthy_at_IIT_Bombay_Techfest.jpg",
-  ma_jack: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Jack_Ma_2014_Shankbone.jpg/440px-Jack_Ma_2014_Shankbone.jpg",
-  ambani_mukesh: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Mukesh_Ambani.jpg/440px-Mukesh_Ambani.jpg",
-  lemann_jorge: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Jorge_Paulo_Lemann.jpg/440px-Jorge_Paulo_Lemann.jpg",
-  sawiris_naguib: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Naguib_Sawiris_2012_Shankbone.jpg/440px-Naguib_Sawiris_2012_Shankbone.jpg",
-  the_opposer: "",
+  dangote_aliko:    CDN + "hf_20260625_140716_cd57721e-0d59-4a03-9e18-11aa93d50bd8.png",
+  elumelu_tony:     CDN + "hf_20260625_141022_0503ea47-0cf7-40e8-af98-55b452856fe1.png",
+  ovia_jim:         CDN + "hf_20260625_141215_9cf022e1-3d5d-4ed7-94c5-303f7709c379.png",
+  rabiu_abdulsamad: CDN + "hf_20260625_141215_9cf022e1-3d5d-4ed7-94c5-303f7709c379.png", // fallback
+  maduka_cosmas:    CDN + "hf_20260625_141022_0503ea47-0cf7-40e8-af98-55b452856fe1.png", // fallback
+  rinehart_gina:    CDN + "hf_20260625_141004_33af287a-a0cf-47ba-9237-4b3e86f35b38.png",
+  lowy_frank:       CDN + "hf_20260625_141043_ee472a17-9427-44be-a143-793ae1b378d1.png",
+  musk_elon:        CDN + "hf_20260625_140739_aff54c78-37ad-4421-8243-2bccc6e2f39f.png",
+  gates_bill:       CDN + "hf_20260625_140854_b146b7d2-5e61-4159-b78a-a7b0db70eb88.png",
+  nadella_satya:    CDN + "hf_20260625_141013_7dd5bba2-807f-4c6b-8c84-cd17a1c8cd0d.png",
+  arnault_bernard:  CDN + "hf_20260625_141007_c556dcb5-97bc-4b44-aa67-fdab41fe302d.png",
+  branson_richard:  CDN + "hf_20260625_141010_6c869faa-9850-4e18-8f1b-a7530f3ef3d4.png",
+  murthy_narayana:  CDN + "hf_20260625_141027_2f7951e5-733b-467e-9399-71f1dd6dccb3.png",
+  ma_jack:          CDN + "hf_20260625_141000_7bbc3ea3-5fd9-4bab-b7b6-36ba7f551d4d.png",
+  ambani_mukesh:    CDN + "hf_20260625_141016_13677985-f31a-4182-bd31-e9d3d02c9e4c.png",
+  lemann_jorge:     CDN + "hf_20260625_141047_c2f5638c-85d5-41d2-acb0-4088e2ecb012.png",
+  sawiris_naguib:   CDN + "hf_20260625_141118_2262534d-831f-44fc-8b42-1012a2f68a06.png",
+  the_opposer:      CDN + "hf_20260625_141158_f9f2dd7a-100c-422f-9516-9effb6e4198d.png",
+};
+
+const CDN_V = "https://d8j0ntlcm91z4.cloudfront.net/user_3Ch4M6H25WVlp2HD1Qf0bakU3iW/";
+
+// AI-animated Higgsfield video headshots (kling3_0_turbo)
+const VIDEO_URLS: Record<string, string> = {
+  musk_elon:       CDN_V + "hf_20260625_141410_ab694085-4759-446a-a695-7c3de41297d7.mp4",
+  gates_bill:      CDN_V + "hf_20260625_141429_d102cec3-1050-45cd-8aa8-3e7460f90c4f.mp4",
+  ma_jack:         CDN_V + "hf_20260625_141435_0ea0f177-d3ec-426f-b0c9-af51b259abab.mp4",
+  rinehart_gina:   CDN_V + "hf_20260625_141438_b65a685f-2df0-4775-9767-0175e73c5626.mp4",
+  the_opposer:     CDN_V + "hf_20260625_141450_a7e73404-1f01-47a2-b1fb-35490b2f8f21.mp4",
+  dangote_aliko:   CDN_V + "hf_20260625_141454_38c14b56-81a3-4017-844b-57acef3838f5.mp4",
+  arnault_bernard: CDN_V + "hf_20260625_141539_606b0418-7fb0-4644-bed7-a22d8ea1a69a.mp4",
 };
 
 export default function DirectorCard({ director, response, loading, index }: Props) {
   const [expanded, setExpanded] = useState(false);
   const avatarUrl = AVATAR_URLS[director.id];
+  const videoUrl = VIDEO_URLS[director.id];
   const isOpposer = director.isOpposer;
 
   const borderColor = isOpposer ? "#dc2626" : director.accentColor;
@@ -65,7 +82,16 @@ export default function DirectorCard({ director, response, loading, index }: Pro
             background: `${borderColor}22`,
           }}
         >
-          {avatarUrl ? (
+          {videoUrl ? (
+            <video
+              src={videoUrl}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover object-top"
+            />
+          ) : avatarUrl ? (
             <img
               src={avatarUrl}
               alt={director.name}
