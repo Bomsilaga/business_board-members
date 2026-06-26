@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { Director } from "@/lib/directors";
-import { ChevronDown, ChevronUp, AlertTriangle, Loader2 } from "lucide-react";
+import { AlertTriangle, Loader2 } from "lucide-react";
 
 interface Props {
   director: Director;
@@ -13,13 +12,12 @@ interface Props {
 
 const CDN = "https://d8j0ntlcm91z4.cloudfront.net/user_3Ch4M6H25WVlp2HD1Qf0bakU3iW/";
 
-// AI-generated cinematic portraits (Higgsfield soul_cast)
 const AVATAR_URLS: Record<string, string> = {
   dangote_aliko:    CDN + "hf_20260625_140716_cd57721e-0d59-4a03-9e18-11aa93d50bd8.png",
   elumelu_tony:     CDN + "hf_20260625_141022_0503ea47-0cf7-40e8-af98-55b452856fe1.png",
   ovia_jim:         CDN + "hf_20260625_141215_9cf022e1-3d5d-4ed7-94c5-303f7709c379.png",
-  rabiu_abdulsamad: CDN + "hf_20260625_141215_9cf022e1-3d5d-4ed7-94c5-303f7709c379.png", // fallback
-  maduka_cosmas:    CDN + "hf_20260625_141022_0503ea47-0cf7-40e8-af98-55b452856fe1.png", // fallback
+  rabiu_abdulsamad: CDN + "hf_20260625_141215_9cf022e1-3d5d-4ed7-94c5-303f7709c379.png",
+  maduka_cosmas:    CDN + "hf_20260625_141022_0503ea47-0cf7-40e8-af98-55b452856fe1.png",
   rinehart_gina:    CDN + "hf_20260625_141004_33af287a-a0cf-47ba-9237-4b3e86f35b38.png",
   lowy_frank:       CDN + "hf_20260625_141043_ee472a17-9427-44be-a143-793ae1b378d1.png",
   musk_elon:        CDN + "hf_20260625_140739_aff54c78-37ad-4421-8243-2bccc6e2f39f.png",
@@ -35,9 +33,8 @@ const AVATAR_URLS: Record<string, string> = {
   the_opposer:      CDN + "hf_20260625_141158_f9f2dd7a-100c-422f-9516-9effb6e4198d.png",
 };
 
-const CDN_V = "https://d8j0ntlcm91z4.cloudfront.net/user_3Ch4M6H25WVlp2HD1Qf0bakU3iW/";
+const CDN_V = CDN;
 
-// AI-animated Higgsfield video headshots (kling3_0_turbo)
 const VIDEO_URLS: Record<string, string> = {
   musk_elon:       CDN_V + "hf_20260625_141410_ab694085-4759-446a-a695-7c3de41297d7.mp4",
   gates_bill:      CDN_V + "hf_20260625_141429_d102cec3-1050-45cd-8aa8-3e7460f90c4f.mp4",
@@ -54,11 +51,9 @@ const VIDEO_URLS: Record<string, string> = {
 };
 
 export default function DirectorCard({ director, response, loading, index }: Props) {
-  const [expanded, setExpanded] = useState(false);
   const avatarUrl = AVATAR_URLS[director.id];
   const videoUrl = VIDEO_URLS[director.id];
   const isOpposer = director.isOpposer;
-
   const borderColor = isOpposer ? "#dc2626" : director.accentColor;
 
   return (
@@ -88,37 +83,21 @@ export default function DirectorCard({ director, response, loading, index }: Pro
           }}
         >
           {videoUrl ? (
-            <video
-              src={videoUrl}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-cover object-top"
-            />
+            <video autoPlay loop muted playsInline className="w-full h-full object-cover object-top" src={videoUrl} />
           ) : avatarUrl ? (
             <img
               src={avatarUrl}
               alt={director.name}
               className="w-full h-full object-cover object-top"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = "none";
-              }}
+              onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-2xl">
-              {director.emoji}
-            </div>
+            <div className="w-full h-full flex items-center justify-center text-2xl">{director.emoji}</div>
           )}
-          {/* Animated ring when loading */}
           {loading && (
             <div
               className="absolute inset-0 rounded-full"
-              style={{
-                border: `2px solid ${borderColor}`,
-                borderTopColor: "transparent",
-                animation: "spin 1s linear infinite",
-              }}
+              style={{ border: `2px solid ${borderColor}`, borderTopColor: "transparent", animation: "spin 1s linear infinite" }}
             />
           )}
         </div>
@@ -131,16 +110,10 @@ export default function DirectorCard({ director, response, loading, index }: Pro
               {director.name}
             </p>
           </div>
-          <p className="text-xs truncate" style={{ color: "#7777aa" }}>
-            {director.company}
-          </p>
+          <p className="text-xs truncate" style={{ color: "#7777aa" }}>{director.company}</p>
           <div className="flex flex-wrap gap-1 mt-1">
             {director.expertise.slice(0, 2).map((e) => (
-              <span
-                key={e}
-                className="text-xs px-1.5 py-0.5 rounded-full"
-                style={{ background: `${borderColor}22`, color: borderColor, fontSize: "10px" }}
-              >
+              <span key={e} className="text-xs px-1.5 py-0.5 rounded-full" style={{ background: `${borderColor}22`, color: borderColor, fontSize: "10px" }}>
                 {e}
               </span>
             ))}
@@ -152,21 +125,14 @@ export default function DirectorCard({ director, response, loading, index }: Pro
           {loading ? (
             <Loader2 size={16} className="animate-spin" style={{ color: borderColor }} />
           ) : response ? (
-            <button
-              onClick={() => setExpanded(!expanded)}
-              className="flex items-center gap-1 text-xs px-2 py-1 rounded-lg"
-              style={{ background: `${borderColor}22`, color: borderColor }}
-            >
-              {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-              {expanded ? "Less" : "Read"}
-            </button>
+            <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: `${borderColor}22`, color: borderColor }}>✓</span>
           ) : (
             <span className="text-xs" style={{ color: "#444466" }}>Waiting</span>
           )}
         </div>
       </div>
 
-      {/* Philosophy teaser */}
+      {/* Philosophy teaser (before response) */}
       {!response && !loading && (
         <div className="px-4 pb-3">
           <p className="text-xs italic" style={{ color: "#555577" }}>&ldquo;{director.philosophy}&rdquo;</p>
@@ -179,32 +145,6 @@ export default function DirectorCard({ director, response, loading, index }: Pro
           <div className="shimmer h-3 rounded w-full" />
           <div className="shimmer h-3 rounded w-4/5" />
           <div className="shimmer h-3 rounded w-3/5" />
-        </div>
-      )}
-
-      {/* Response */}
-      {response && (
-        <div className="px-4 pb-4">
-          {/* Preview */}
-          <p className="text-xs leading-relaxed" style={{ color: "#aaaacc" }}>
-            {expanded ? response : response.slice(0, 180) + (response.length > 180 ? "…" : "")}
-          </p>
-          {expanded && (
-            <div
-              className="mt-3 pt-3 text-xs space-y-1"
-              style={{ borderTop: `1px solid ${borderColor}22`, color: "#7777aa" }}
-            >
-              {director.expertise.map((e) => (
-                <span
-                  key={e}
-                  className="inline-block mr-1 mb-1 px-2 py-0.5 rounded-full"
-                  style={{ background: `${borderColor}15`, color: borderColor }}
-                >
-                  {e}
-                </span>
-              ))}
-            </div>
-          )}
         </div>
       )}
     </div>

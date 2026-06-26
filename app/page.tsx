@@ -1,14 +1,13 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { DIRECTORS, BUSINESS_SECTORS, MARKET_FOCUS } from "@/lib/directors";
 import DirectorCard from "@/components/DirectorCard";
-import ConsensusPanel from "@/components/ConsensusPanel";
-import { Send, Globe, TrendingUp, Shield, Zap } from "lucide-react";
+import { Send, Globe, TrendingUp, Shield, Zap, ChevronDown, ChevronUp } from "lucide-react";
 
 const STATS = [
   { label: "Directors", value: "18", icon: Globe, color: "#6366f1" },
-  { label: "Markets", value: "AU & CN", icon: TrendingUp, color: "#10b981" },
+  { label: "Home Market", value: "Australia", icon: TrendingUp, color: "#10b981" },
   { label: "Sectors", value: "16+", icon: Zap, color: "#f59e0b" },
   { label: "Includes Opposer", value: "Yes", icon: Shield, color: "#dc2626" },
 ];
@@ -16,23 +15,34 @@ const STATS = [
 export default function Home() {
   const [question, setQuestion] = useState("");
   const [sector, setSector] = useState("");
-  const [market, setMarket] = useState("Australia-China Trade");
+  const [market, setMarket] = useState("Australia");
   const [running, setRunning] = useState(false);
   const [responses, setResponses] = useState<Record<string, string>>({});
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  const toggleExpand = (id: string) => {
+    setExpandedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   const handleSubmit = useCallback(async () => {
     if (!question.trim() || running) return;
     setRunning(true);
     setResponses({});
     setDone(false);
+    setExpandedIds(new Set());
 
-    const fullQuestion = `${question}${sector ? ` (Sector: ${sector})` : ""} — focus on ${market} market opportunities.`;
+    const fullQuestion = `${question}${sector ? ` [Sector: ${sector}]` : ""} — Market focus: ${market}.`;
 
     const regular = DIRECTORS.filter((d) => !d.isOpposer);
     const opposer = DIRECTORS.find((d) => d.isOpposer)!;
-
     const collectedResponses: Record<string, string> = {};
 
     for (const director of regular) {
@@ -44,34 +54,28 @@ export default function Home() {
           body: JSON.stringify({ question: fullQuestion, directorId: director.id }),
         });
         const data = await res.json();
-        if (data.response) {
-          collectedResponses[director.id] = data.response;
-          setResponses((prev) => ({ ...prev, [director.id]: data.response }));
-        }
+        const text = data.response || "No response received.";
+        collectedResponses[director.id] = text;
+        setResponses((prev) => ({ ...prev, [director.id]: text }));
       } catch {
-        collectedResponses[director.id] = "Unable to generate response. Please check your API key.";
-        setResponses((prev) => ({ ...prev, [director.id]: collectedResponses[director.id] }));
+        const err = "Unable to connect — check ANTHROPIC_API_KEY in Vercel settings.";
+        collectedResponses[director.id] = err;
+        setResponses((prev) => ({ ...prev, [director.id]: err }));
       }
     }
 
-    // Opposer last — sees all previous responses
     setLoadingId(opposer.id);
     try {
-      const allSoFar = regular
-        .map((d) => `${d.name}: ${collectedResponses[d.id] ?? "no response"}`)
-        .join("\n\n");
-
+      const allSoFar = regular.map((d) => `${d.name}: ${collectedResponses[d.id] ?? "no response"}`).join("\n\n");
       const res = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: fullQuestion, directorId: opposer.id, previousResponses: allSoFar }),
       });
       const data = await res.json();
-      if (data.response) {
-        setResponses((prev) => ({ ...prev, [opposer.id]: data.response }));
-      }
+      setResponses((prev) => ({ ...prev, [opposer.id]: data.response || "No response received." }));
     } catch {
-      setResponses((prev) => ({ ...prev, [opposer.id]: "Unable to generate Opposer response." }));
+      setResponses((prev) => ({ ...prev, [opposer.id]: "Unable to connect — check ANTHROPIC_API_KEY in Vercel settings." }));
     }
 
     setLoadingId(null);
@@ -79,19 +83,24 @@ export default function Home() {
     setDone(true);
   }, [question, sector, market, running]);
 
+  // Auto-scroll to results when all done
+  useEffect(() => {
+    if (done && resultsRef.current) {
+      setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 200);
+    }
+  }, [done]);
+
   const regular = DIRECTORS.filter((d) => !d.isOpposer);
   const opposer = DIRECTORS.find((d) => d.isOpposer)!;
   const responseCount = Object.keys(responses).length;
+  const orderedDirectors = [...regular, opposer];
 
   return (
     <main className="min-h-screen" style={{ background: "var(--background)" }}>
       {/* Hero Header */}
       <div
         className="relative overflow-hidden"
-        style={{
-          background: "linear-gradient(135deg, #07070f 0%, #0d0d20 50%, #07070f 100%)",
-          borderBottom: "1px solid #252540",
-        }}
+        style={{ background: "linear-gradient(135deg, #07070f 0%, #0d0d20 50%, #07070f 100%)", borderBottom: "1px solid #252540" }}
       >
         <div
           className="absolute inset-0 opacity-5"
@@ -100,17 +109,12 @@ export default function Home() {
             backgroundSize: "48px 48px",
           }}
         />
-
         <div className="relative max-w-7xl mx-auto px-4 py-12 sm:py-16">
           <div className="flex justify-center mb-6">
-            <span
-              className="text-xs font-semibold px-3 py-1.5 rounded-full"
-              style={{ background: "#6366f122", color: "#a5b4fc", border: "1px solid #6366f144" }}
-            >
-              🌏 Australia & China Focus · 18 World-Class Directors
+            <span className="text-xs font-semibold px-3 py-1.5 rounded-full" style={{ background: "#6366f122", color: "#a5b4fc", border: "1px solid #6366f144" }}>
+              🌏 Australia-Focused · Global Perspectives · 18 World-Class Directors
             </span>
           </div>
-
           <h1 className="text-center text-4xl sm:text-5xl font-bold mb-4 tracking-tight" style={{ color: "#e2e2f0" }}>
             Global Business{" "}
             <span style={{ background: "linear-gradient(135deg, #6366f1, #a855f7, #ec4899)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
@@ -118,9 +122,8 @@ export default function Home() {
             </span>
           </h1>
           <p className="text-center text-base mb-10 max-w-2xl mx-auto" style={{ color: "#7777aa" }}>
-            Submit any business opportunity. 17 billionaire directors analyse it from their unique worldview,
-            then <span style={{ color: "#f87171" }}>The Opposer</span> tears it apart.
-            Focused on <strong style={{ color: "#aaaacc" }}>Australia & China</strong> markets.
+            Submit any business opportunity. 17 billionaire directors give you deep, actionable strategies — tools, links, regulatory steps, capital ranges.
+            Then <span style={{ color: "#f87171" }}>The Opposer</span> stress-tests every assumption.
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 mb-10">
@@ -137,8 +140,8 @@ export default function Home() {
             <div className="rounded-2xl p-4" style={{ background: "#0f0f1a", border: "1px solid #252540" }}>
               <textarea
                 className="w-full bg-transparent text-sm resize-none outline-none mb-3"
-                style={{ color: "#e2e2f0", minHeight: 80 }}
-                placeholder="Describe your business idea… e.g. 'Premium Australian food exports to China — unconventional tricks, all tools, regulatory steps, capital needed, low-competition niches.'"
+                style={{ color: "#e2e2f0", minHeight: 90 }}
+                placeholder="Describe your business idea… e.g. 'I want to start a premium aged care facility in regional Queensland — what unconventional angles, low-competition niches, tools, regulatory steps and capital do I need?'"
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleSubmit(); }}
@@ -195,60 +198,193 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Directors Grid */}
-      <div className="max-w-7xl mx-auto px-4 py-10">
-        <div className="flex items-center gap-3 mb-6">
-          <h2 className="text-xl font-bold" style={{ color: "#e2e2f0" }}>The Board</h2>
+      {/* Directors Grid — avatar status overview */}
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="flex items-center gap-3 mb-5">
+          <h2 className="text-lg font-bold" style={{ color: "#e2e2f0" }}>The Board</h2>
           <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "#252540", color: "#7777aa" }}>17 Directors + The Opposer</span>
           {done && (
             <span className="text-xs px-2 py-0.5 rounded-full ml-auto" style={{ background: "#0a2a0a", color: "#4ade80", border: "1px solid #1a4a1a" }}>
-              ✓ All responses received
+              ✓ All {DIRECTORS.length} responses received — scroll down for full analysis
             </span>
           )}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 mb-4">
           {regular.map((director, i) => (
             <DirectorCard key={director.id} director={director} response={responses[director.id] ?? null} loading={loadingId === director.id} index={i} />
           ))}
         </div>
 
-        {/* Opposer — full-width prominent card */}
+        {/* Opposer */}
         <div
-          className="mb-6 rounded-2xl overflow-hidden"
-          style={{
-            background: "linear-gradient(135deg, #1a0505 0%, #0f0005 100%)",
-            border: "1px solid #dc262655",
-            boxShadow: responses[opposer.id] ? "0 0 40px #dc262618" : undefined,
-          }}
+          className="mb-4 rounded-2xl overflow-hidden"
+          style={{ background: "linear-gradient(135deg, #1a0505 0%, #0f0005 100%)", border: "1px solid #dc262655", boxShadow: responses[opposer.id] ? "0 0 40px #dc262618" : undefined }}
         >
           <div className="px-4 py-2 flex items-center gap-2" style={{ background: "#dc262612", borderBottom: "1px solid #dc262628" }}>
             <span style={{ color: "#f87171" }}>⚔️</span>
-            <span className="text-xs font-semibold" style={{ color: "#f87171" }}>
-              THE OPPOSER — Devil&apos;s Advocate · Critiques all 17 directors · Responds last
-            </span>
+            <span className="text-xs font-semibold" style={{ color: "#f87171" }}>THE OPPOSER — Critiques all 17 directors · Responds last</span>
           </div>
           <DirectorCard director={opposer} response={responses[opposer.id] ?? null} loading={loadingId === opposer.id} index={18} />
         </div>
-
-        {responseCount >= 3 && (
-          <ConsensusPanel responses={responses} totalDirectors={DIRECTORS.length} question={question} />
-        )}
 
         {responseCount === 0 && !running && (
           <div className="text-center py-20">
             <div className="text-7xl mb-6">🌏</div>
             <p className="text-xl font-semibold mb-2" style={{ color: "#aaaacc" }}>Ask your first business question</p>
             <p className="text-sm max-w-md mx-auto" style={{ color: "#555577" }}>
-              All 18 directors will analyse it — including The Opposer who challenges every assumption.
-              Get unconventional tricks, all tools needed, regulatory steps, capital ranges, and low-competition niches.
+              18 directors give you deep, actionable strategies — step-by-step setup, real tools, links, capital ranges, regulatory paths, and unconventional angles you won&apos;t find anywhere else.
             </p>
           </div>
         )}
       </div>
 
-      <div className="text-center py-6 mt-4" style={{ borderTop: "1px solid #252540", color: "#444466" }}>
-        <p className="text-xs">Global Business Board of Directors · Powered by Claude AI · Australia & China Focus</p>
+      {/* ====== FULL BOARD ANALYSIS — the actual output ====== */}
+      {responseCount > 0 && (
+        <div ref={resultsRef} className="max-w-5xl mx-auto px-4 pb-16">
+          <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid #3b3b6a" }}>
+            <div className="px-6 py-4" style={{ background: "linear-gradient(135deg, #0c0c20, #10102a)", borderBottom: "1px solid #252540" }}>
+              <h2 className="text-xl font-bold" style={{ color: "#e2e2f0" }}>
+                📋 Full Board Analysis
+              </h2>
+              <p className="text-xs mt-1" style={{ color: "#7777aa" }}>
+                {responseCount}/{DIRECTORS.length} directors · Click any director to expand their full analysis
+              </p>
+            </div>
+
+            <div style={{ background: "#08080f" }}>
+              {orderedDirectors.map((director, i) => {
+                const resp = responses[director.id];
+                const isExpanded = expandedIds.has(director.id);
+                const isOpp = director.isOpposer;
+                const color = isOpp ? "#dc2626" : director.accentColor;
+
+                return (
+                  <div
+                    key={director.id}
+                    style={{ borderBottom: i < orderedDirectors.length - 1 ? "1px solid #1a1a2e" : undefined }}
+                  >
+                    {/* Director header row — always visible, clickable */}
+                    <button
+                      className="w-full text-left px-6 py-4 flex items-center gap-4 transition-all"
+                      style={{ background: isExpanded ? `${color}08` : "transparent", cursor: "pointer" }}
+                      onClick={() => resp && toggleExpand(director.id)}
+                    >
+                      <span className="text-2xl flex-shrink-0">{director.emoji}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-semibold text-sm" style={{ color: isOpp ? "#f87171" : "#e2e2f0" }}>
+                            {director.name}
+                          </span>
+                          <span className="text-xs" style={{ color: "#555577" }}>{director.company}</span>
+                          {isOpp && (
+                            <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ background: "#dc262622", color: "#f87171" }}>Devil's Advocate</span>
+                          )}
+                        </div>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {director.expertise.slice(0, 3).map((e) => (
+                            <span key={e} className="text-xs" style={{ color: color, fontSize: "10px" }}>#{e.replace(/\s/g, "")}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        {loadingId === director.id && (
+                          <span className="text-xs animate-pulse" style={{ color }}>Thinking…</span>
+                        )}
+                        {resp && !isExpanded && (
+                          <span className="text-xs hidden sm:block max-w-48 truncate" style={{ color: "#7777aa" }}>
+                            {resp.slice(0, 60)}…
+                          </span>
+                        )}
+                        {resp ? (
+                          isExpanded ? <ChevronUp size={16} style={{ color }} /> : <ChevronDown size={16} style={{ color: "#555577" }} />
+                        ) : (
+                          <span className="text-xs" style={{ color: "#333355" }}>
+                            {loadingId === director.id ? "…" : "Waiting"}
+                          </span>
+                        )}
+                      </div>
+                    </button>
+
+                    {/* Full response — shown when expanded */}
+                    {resp && isExpanded && (
+                      <div className="px-6 pb-6" style={{ background: `${color}05` }}>
+                        <div
+                          className="rounded-xl p-5"
+                          style={{
+                            background: isOpp ? "#1a050510" : "#0f0f1a",
+                            border: `1px solid ${color}22`,
+                          }}
+                        >
+                          <div className="prose prose-invert max-w-none">
+                            {resp.split("\n").map((line, li) => {
+                              if (!line.trim()) return <div key={li} className="h-2" />;
+                              const isBullet = /^[-•*]\s/.test(line.trim());
+                              const isNumbered = /^\d+[.)]\s/.test(line.trim());
+                              const isHeading = line.trim().startsWith("**") && line.trim().endsWith("**");
+
+                              if (isHeading) {
+                                return (
+                                  <p key={li} className="font-bold text-sm mt-3 mb-1" style={{ color }}>
+                                    {line.replace(/\*\*/g, "")}
+                                  </p>
+                                );
+                              }
+                              if (isBullet || isNumbered) {
+                                return (
+                                  <div key={li} className="flex gap-2 text-sm mb-1.5" style={{ color: "#ccccee" }}>
+                                    <span style={{ color, flexShrink: 0, marginTop: 2 }}>
+                                      {isBullet ? "▸" : line.match(/^\d+/)?.[0] + "."}
+                                    </span>
+                                    <span>{line.replace(/^[-•*]\s/, "").replace(/^\d+[.)]\s/, "")}</span>
+                                  </div>
+                                );
+                              }
+                              return (
+                                <p key={li} className="text-sm leading-relaxed mb-2" style={{ color: "#b0b0cc" }}>
+                                  {line}
+                                </p>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Expand All / Collapse All */}
+            {responseCount > 0 && (
+              <div className="px-6 py-3 flex gap-3" style={{ background: "#0c0c18", borderTop: "1px solid #1a1a2e" }}>
+                <button
+                  className="text-xs px-3 py-1.5 rounded-lg"
+                  style={{ background: "#6366f122", color: "#a5b4fc", border: "1px solid #6366f133" }}
+                  onClick={() => setExpandedIds(new Set(orderedDirectors.filter(d => responses[d.id]).map(d => d.id)))}
+                >
+                  Expand All
+                </button>
+                <button
+                  className="text-xs px-3 py-1.5 rounded-lg"
+                  style={{ background: "#252540", color: "#7777aa" }}
+                  onClick={() => setExpandedIds(new Set())}
+                >
+                  Collapse All
+                </button>
+                {done && (
+                  <span className="ml-auto text-xs self-center" style={{ color: "#4ade80" }}>
+                    ✓ Board session complete
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      <div className="text-center py-6" style={{ borderTop: "1px solid #252540", color: "#444466" }}>
+        <p className="text-xs">Global Business Board of Directors · Powered by Claude AI · Australia-Focused</p>
       </div>
     </main>
   );
