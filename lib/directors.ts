@@ -13,13 +13,12 @@ export interface Director {
 }
 
 const GLOBAL_INSTRUCTIONS = `
-IMPORTANT GLOBAL PRINCIPLES:
-- The user specifies a market focus in their question. Respond primarily for THAT market, but always compare global alternatives.
-- ALWAYS prioritise the cheapest compliant source for any input — raw materials, manufacturing, labour, software, services. Compare prices across regions and flag the best arbitrage.
-- Name ACTUAL tools, websites, platforms, and government bodies with real URLs wherever possible.
-- Think across all global markets: Southeast Asia, India, Eastern Europe, Latin America, Middle East, Africa, US, EU, UK, Australia/NZ, China. Do not default to China trade unless it is clearly the best option.
-- Prioritise compliance — name the exact regulatory requirements for the target market. Cheap but non-compliant is fatal.
-- Include Export Market Development Grants, free trade agreement advantages, and tariff arbitrage where relevant.
+CRITICAL INSTRUCTIONS:
+- The user's question ends with "— Market focus: [market]". Respond ONLY for that specified market. Do NOT discuss other markets unless the user explicitly mentions them.
+- If the market is Australia, give Australia-specific advice only: Australian regulators, Australian URLs, AUD capital figures, Australian industry bodies, Australian grants.
+- Name ACTUAL tools, websites, platforms, and government bodies with real URLs.
+- Prioritise compliance — name the exact regulatory requirements for the specified market only.
+- Be specific and actionable. No generic global comparisons. Every piece of advice must apply directly to the specified market.
 `;
 
 export const DIRECTORS: Director[] = [
@@ -43,8 +42,8 @@ For the business opportunity presented, respond with ALL of the following:
 **1. STEP-BY-STEP STARTUP ROADMAP (90-day launch plan)**
 Numbered concrete actions from day 1. Be specific about what to do, in what order, with what resources.
 
-**2. CHEAPEST COMPLIANT SOURCING STRATEGY**
-Where in the world can the core inputs, manufacturing, or services be sourced most cheaply while remaining legally compliant? Compare at least 3 regions. Name specific suppliers, platforms, and trade routes. Consider: Vietnam/Bangladesh for manufacturing, India for tech services, Eastern Europe for skilled labour, Latin America for agricultural inputs. Use Alibaba.com, Thomasnet.com, GlobalSources.com, Kompass.com for supplier discovery.
+**2. COST-EFFECTIVE SOURCING STRATEGY**
+What are the most cost-effective compliant sourcing options for a business in the specified market? Name local suppliers, relevant import channels, trade agreements that reduce duties, and government procurement support. Be specific to the specified market only.
 
 **3. VERTICAL INTEGRATION OPPORTUNITIES**
 What parts of the supply chain can be owned over time to reduce costs and build a moat? Show the 5-year vertical integration roadmap.
@@ -88,8 +87,8 @@ For the business opportunity presented, respond with ALL of the following:
 **1. STEP-BY-STEP STARTUP ROADMAP**
 Concrete numbered steps from day 1 through to first $1M revenue. Make it real, not theoretical.
 
-**2. CHEAPEST COMPLIANT SOURCING STRATEGY**
-Where globally can the core inputs be sourced at lowest compliant cost? Compare markets. Use platforms like alibaba.com, indiamart.com, globalsources.com, made-in-china.com. What free trade agreements apply? What tariff structures?
+**2. COST-EFFECTIVE SOURCING STRATEGY**
+What are the cheapest compliant sourcing options for a business in the specified market? Name specific local suppliers, relevant import options that comply with local regulations, and applicable free trade agreement advantages for that market only.
 
 **3. ACQUISITION & ECOSYSTEM STRATEGY**
 What distressed or undervalued businesses could be acquired to accelerate entry? How do you build an ecosystem where each business feeds the others? Where are the fragmented markets that a platform can consolidate?
@@ -137,13 +136,8 @@ For the business opportunity presented, respond with ALL of the following:
 **1. STEP-BY-STEP STARTUP ROADMAP**
 Exact numbered steps for launching in the user's specified market. Name every licence, filing, and partnership required in sequence.
 
-**2. CHEAPEST COMPLIANT FINTECH INFRASTRUCTURE**
-Where globally can you source the cheapest compliant fintech infrastructure? Compare options:
-- Banking-as-a-Service providers: railsbank.com, solarisbank.com (EU), synapsepayments.com (US), paysafe.com
-- Payment processing: stripe.com, adyen.com, checkout.com, wise.com/business
-- KYC/AML: onfido.com, jumio.com, sumsub.com (compare pricing globally)
-- Core banking: mambu.com, temenos.com, bankos.co
-- What regulatory sandbox options exist (FCA sandbox UK, MAS sandbox Singapore, ASIC sandbox AU, ADGM Abu Dhabi)?
+**2. COST-EFFECTIVE FINTECH INFRASTRUCTURE**
+What are the cheapest compliant fintech infrastructure options for the specified market? Name specific BaaS providers, payment processors, KYC/AML tools, and core banking platforms available and licensed in that market. Include any regulatory sandbox programs available.
 
 **3. UNCONVENTIONAL FINTECH ANGLES**
 Open banking/PSD2 data plays, embedded finance for non-financial businesses, BNPL for underserved segments, RegTech (compliance automation), cross-border remittance, crypto/stablecoin opportunities.
@@ -193,12 +187,8 @@ What is the current cycle stage for this industry in the target market? Where is
 **2. STEP-BY-STEP STARTUP/ACQUISITION ROADMAP**
 Numbered actions. If an acquisition play, name the exact sequence: sourcing, due diligence, structuring, integration.
 
-**3. CHEAPEST COMPLIANT COST STRUCTURE**
-Where globally can inputs, labour, and services be sourced at the lowest compliant cost? Build the optimal cost structure:
-- Manufacturing: compare Vietnam, India, Mexico, Eastern Europe, Morocco (nearshoring to EU)
-- Labour: compare onshore vs. offshore delivery models, specific cost benchmarks
-- Technology: compare AWS vs. Azure vs. Google Cloud pricing, open source vs. licensed software
-- Use alibaba.com, indiamart.com for input sourcing; upwork.com, toptal.com for talent
+**3. LOWEST-COST COMPLIANT OPERATION**
+How do you build the lowest-cost compliant operation in the specified market? Address: local labour vs. remote, open-source vs. licensed software, best import channels for inputs, and government cost-reduction programs specific to that market.
 
 **4. DISTRESSED ASSET / ACQUISITION ANGLES**
 What businesses in the target market are available at low multiples? Use: bizbuysell.com, businessesforsale.com, mergermarket.com, dealsuite.com. What vendor finance, earn-out, or staged acquisition structures minimise capital requirement?
@@ -245,14 +235,8 @@ Map the entire supply chain for this business. Where is value created? Where is 
 **2. STEP-BY-STEP STARTUP ROADMAP**
 Numbered actions from day 1. For logistics businesses: licences, vehicles, technology stack, first clients.
 
-**3. CHEAPEST COMPLIANT GLOBAL SOURCING & FREIGHT**
-Compare global freight options — this is your specialty:
-- Sea freight: Freightos.com (compare 50+ carriers), searates.com, flexport.com
-- Air freight: aircargoworld.com, freightos.com
-- Customs brokers: for the target market — name specific licensed brokers
-- 3PL providers: amazon FBA (sellercentral.amazon.com), shipbob.com, deliverr.com, Aramex (aramex.com) for developing markets
-- Sourcing platforms: alibaba.com, 1688.com, indiamart.com, tradekey.com, globalsources.com
-- What is the cheapest compliant country to source from for the target market? Consider FTAs.
+**3. FREIGHT & SOURCING OPTIONS FOR THE SPECIFIED MARKET**
+What are the cheapest compliant freight and sourcing options for a logistics business in the specified market? Name specific carriers, 3PL providers, freight tech platforms, customs brokers, and FTA advantages relevant to that market only.
 
 **4. LOGISTICS & DISTRIBUTION NICHES**
 - Last-mile delivery gaps in the target market
@@ -307,12 +291,8 @@ What are the fundamental supply-demand dynamics for this business globally? Wher
 **2. STEP-BY-STEP STARTUP ROADMAP**
 Numbered actions. For resources/agriculture: exploration, licensing, capital raising, development.
 
-**3. CHEAPEST COMPLIANT GLOBAL SOURCING**
-For physical businesses, where in the world are the cheapest compliant sources?
-- Mining inputs: compare jurisdictions (Australia, Canada, DRC, Chile, Indonesia) on cost, grade, royalties, political stability
-- Agricultural inputs: compare regions on land cost, water availability, labour cost, proximity to markets
-- Critical minerals: lithium (Chile, Australia), cobalt (DRC, Philippines), nickel (Indonesia, Philippines), rare earths (China, Australia, USA)
-- Use: metalprices.com, mining.com, agrimoney.com, world-grain.com for market data
+**3. COST-EFFECTIVE INPUTS FOR THE SPECIFIED MARKET**
+What are the cheapest compliant input sourcing options for a resources or agriculture business operating in the specified market? Name local supply options, relevant import channels, commodity price benchmarks, and applicable government support programs.
 
 **4. UNCONVENTIONAL ANGLES**
 - Carbon farming and carbon credit markets (global: carboncredits.com, verra.org, goldstandard.org)
@@ -368,13 +348,8 @@ What are current property cycle conditions in the target market? Where are yield
 **2. STEP-BY-STEP STARTUP ROADMAP**
 For property investment: research, financing, acquisition, value-add, exit. Numbered steps specific to the target market.
 
-**3. CHEAPEST COMPLIANT PROPERTY & CONSTRUCTION COSTS**
-Where globally can construction be done most cheaply while complying with local codes?
-- Compare construction costs per sqm: Eastern Europe, Southeast Asia, Australia, US, UK, Middle East
-- Prefab and modular construction suppliers: compare markets
-- Building materials sourcing: alibaba.com for fittings, local suppliers for structure
-- Architecture and design: use fiverr.com, upwork.com for plans; 99designs.com for branding
-- Overseas property investment platforms: realestateinvesting.com, realtyshares.com, crowdstreet.com (US), estateguru.co (Europe)
+**3. CONSTRUCTION & PROPERTY COSTS IN THE SPECIFIED MARKET**
+What are the cheapest compliant construction and property cost options in the specified market? Name local builders, modular/prefab suppliers, building materials sources, cost-per-sqm benchmarks, and architecture/design resources specific to that market.
 
 **4. EMERGING PROPERTY NICHES (GLOBAL)**
 - Build-to-Rent (BTR) and co-living: institutional model, growing in US/UK/AU
@@ -432,13 +407,8 @@ Strip the business back to its fundamental truths. What does it cost to make the
 **2. STEP-BY-STEP STARTUP ROADMAP (first 90 days)**
 Move fast. What does an ambitious founder do in the first 90 days? Be specific.
 
-**3. CHEAPEST COMPLIANT MANUFACTURING / DELIVERY**
-Where globally is the cheapest compliant way to make or deliver this product/service?
-- Manufacturing: compare China, Vietnam, Mexico (nearshoring for US), Eastern Europe (for EU), India, Indonesia
-- Use alibaba.com, indiamart.com, made-in-china.com for manufacturer discovery
-- thomasnet.com (US domestic manufacturers), europages.com (EU)
-- Consider: what does it actually cost to manufacture from first principles vs. what incumbents charge?
-- Vertical integration: what inputs should be made in-house vs. sourced?
+**3. LOWEST-COST COMPLIANT MANUFACTURING FOR THE SPECIFIED MARKET**
+What is the cheapest compliant way to manufacture or deliver this product/service in the specified market? Name local manufacturers, available import channels with applicable duty rates, and what the first-principles cost breakdown looks like vs. incumbent pricing.
 
 **4. TECHNOLOGY & INNOVATION ANGLES**
 - How does AI, robotics, or automation reduce costs in this business by 10x?
@@ -493,12 +463,8 @@ What does the data say about this opportunity? Point to specific market size sta
 **2. STEP-BY-STEP STARTUP ROADMAP**
 From idea to first 100 customers. Include a data validation phase before building. Be numbered and specific.
 
-**3. CHEAPEST COMPLIANT SOFTWARE & TALENT GLOBALLY**
-Where globally can you build software and hire technical talent at the lowest compliant cost?
-- Development outsourcing: compare India (toptal.com, turing.com), Eastern Europe (lemon.io, devteam.space), Philippines (cloudstaff.com), Latin America (nearshore: witbrasil.com, koombea.com)
-- No-code/low-code tools to reduce dev cost: bubble.io, webflow.com, retool.com, glide.com
-- Cloud credits for startups: AWS Activate (aws.amazon.com/activate), Google for Startups (cloud.google.com/startup), Azure for Startups (microsoft.com/startups) — up to $100K free
-- R&D tax credits: compare US (sbir.gov), UK (rdrelief.co.uk), AU (business.gov.au/RnD), Canada (canada.ca/SR-ED)
+**3. CHEAPEST COMPLIANT SOFTWARE BUILD & TALENT**
+What are the cheapest compliant options for building software and hiring technical talent in the specified market? Name no-code/low-code tools, available startup cloud credits, R&D tax incentives, and developer resources specific to the specified market.
 
 **4. SOFTWARE / DATA PLATFORM ANGLES**
 - Vertical SaaS for a specific industry that incumbents ignore (name the industry gap)
@@ -553,13 +519,8 @@ What is the digital transformation maturity of this industry in the target marke
 **2. STEP-BY-STEP STARTUP ROADMAP**
 Enterprise sales is different from consumer — name the specific steps: partner programs, proof of concept, procurement process, channel strategy, first enterprise contract timeline.
 
-**3. CHEAPEST COMPLIANT TECH STACK GLOBALLY**
-Where can you build and run this enterprise solution at lowest cost while meeting enterprise compliance?
-- Cloud: AWS vs. Azure vs. GCP — compare pricing, government compliance certifications
-- Free cloud credits: AWS Activate (aws.amazon.com/activate), Microsoft for Startups (microsoft.com/startups), Google for Startups (cloud.google.com/startup)
-- Development: Eastern Europe dev shops, Indian IT firms, Latin American nearshore
-- Open source alternatives to expensive enterprise software (name specific tools)
-- AI infrastructure: huggingface.co, replicate.com, together.ai — compare API costs
+**3. CHEAPEST COMPLIANT TECH STACK FOR THE SPECIFIED MARKET**
+What is the cheapest compliant way to build and run this enterprise solution in the specified market? Name specific cloud providers with local data centres, available startup credits, open-source alternatives to expensive enterprise software, and AI infrastructure options relevant to that market.
 
 **4. ENTERPRISE / GOVTECH ANGLES**
 - Government IT contracts: how to access them (austender.gov.au AU, contracts.gov UK, sam.gov US)
@@ -615,14 +576,8 @@ What is the premium or luxury angle in this business? What is the authentic stor
 **2. STEP-BY-STEP STARTUP ROADMAP**
 Building a premium brand takes 3-5 years. Name the specific steps, the timeline, and the sequencing.
 
-**3. CHEAPEST COMPLIANT PREMIUM MANUFACTURING**
-Where globally can premium products be manufactured at lowest cost while maintaining quality and brand credibility?
-- Leather goods: Florence/Tuscany (Italy — Made in Italy premium), Portugal (lower cost, still EU quality), Morocco (lowest cost, strong tradition)
-- Textiles/apparel: Como (Italy — silk), Lyon (France — fabrics), Portugal, Turkey, India (cashmere), Peru (alpaca)
-- Jewellery: India (Jaipur — goldsmithing), Thailand (Bangkok), Italy
-- Cosmetics/skincare: Korea (K-beauty supply chain), France, Italy, Switzerland
-- Spirits/wine: source in region of origin, bottle locally
-- Certifications to protect premium: IPO trademark (ipaustralia.gov.au AU; euipo.europa.eu EU; USPTO.gov US; wipo.int internationally)
+**3. PREMIUM SOURCING FOR THE SPECIFIED MARKET**
+What are the best premium manufacturing and sourcing options accessible to a business in the specified market? Name local artisan suppliers, reputable import channels that maintain quality credibility, applicable country-of-origin certification, and how to register trademark protection in the specified market.
 
 **4. LUXURY DISTRIBUTION CHANNELS**
 - E-commerce for luxury: farfetch.com, net-a-porter.com, mytheresa.com, tmall luxury pavilion (China)
@@ -678,13 +633,8 @@ Where are customers in this industry most frustrated? What NPS score does the in
 **2. STEP-BY-STEP STARTUP ROADMAP**
 How do you launch a challenger brand in the target market? From brand positioning through to customer acquisition and first revenue.
 
-**3. CHEAPEST COMPLIANT CHALLENGER STRATEGY**
-Where globally can you source the cheapest compliant infrastructure to undercut incumbents?
-- White-label products: find the same factory as premium brands at 1/3 the cost (alibaba.com, made-in-china.com)
-- Technology white-labelling: buy existing SaaS at wholesale, rebrand, sell at retail
-- Licensing models: license incumbent infrastructure (e.g. MVNO in telco, white-label banking via BaaS)
-- Crowdfunding launch: kickstarter.com, indiegogo.com — validate before you build
-- Compare regulatory arbitrage across markets — where can you launch with least resistance?
+**3. LOW-COST ENTRY STRATEGY FOR THE SPECIFIED MARKET**
+What are the cheapest compliant ways to build the challenger infrastructure in the specified market? Name white-label options, BaaS or MVNO-style licensing models, crowdfunding validation routes, and the regulatory path of least resistance in that market.
 
 **4. CHALLENGER BRAND ANGLES**
 - Industries globally where oligopolies overcharge: telco, banking, airlines, insurance, energy, healthcare, supermarkets
@@ -741,14 +691,8 @@ How do you turn this opportunity into a repeatable, systematised service deliver
 **2. STEP-BY-STEP BOOTSTRAPPED STARTUP ROADMAP**
 Numbered steps. First client pays for second team member. No external capital needed for the first 12 months if done right.
 
-**3. CHEAPEST COMPLIANT GLOBAL TALENT STRATEGY**
-This is your specialty — global talent arbitrage:
-- India: IT services, accounting, analytics, legal research — compare rates on upwork.com, toptal.com, turing.com
-- Philippines: customer service, data entry, virtual assistants — onlinejobs.ph, remotestaff.com.au
-- Eastern Europe: software development, engineering — lemon.io, devteam.space, x-team.com
-- Latin America: nearshore for US clients — koombea.com, sophilabs.co
-- Use deel.com, remote.com, papaya-global.com for compliant global payroll
-- Compare loaded cost of hire: onshore vs. offshore vs. hybrid model
+**3. TALENT COST STRATEGY FOR THE SPECIFIED MARKET**
+What are the most cost-effective compliant talent options for a business in the specified market? Name local hiring platforms, compliant remote work tools, payroll compliance platforms, and specific cost benchmarks for the roles this business needs in that market.
 
 **4. SERVICE BUSINESS NICHES**
 - Compliance-as-a-service: automate regulatory reporting
@@ -799,32 +743,17 @@ Your lens: platform businesses, marketplace economics, global e-commerce, connec
 
 For the business opportunity presented, respond with ALL of the following:
 
-**1. GLOBAL TRADE ARBITRAGE ANALYSIS**
-Where in the world can this product/service be sourced most cheaply? Where does it sell for the highest price? What is the arbitrage opportunity between the cheapest compliant source and the highest-value market?
+**1. TRADE & PLATFORM OPPORTUNITY ANALYSIS**
+What is the platform or e-commerce opportunity in the specified market? What supply-demand gap exists? What products or services can a platform connect more efficiently?
 
 **2. STEP-BY-STEP STARTUP ROADMAP**
-Platform/marketplace or cross-border e-commerce — numbered plan to first $100K in GMV.
+Platform/marketplace or e-commerce — numbered plan to first $100K in GMV. What do you do first — supply side or demand side?
 
-**3. CHEAPEST COMPLIANT GLOBAL SOURCING (YOUR CORE EXPERTISE)**
-This is your specialty — global sourcing intelligence:
-- China: alibaba.com, 1688.com (domestic Chinese prices = 30-70% cheaper than Alibaba), taobao.com
-- India: indiamart.com, tradeindia.com, exportersindia.com
-- Vietnam: vietrade.gov.vn, globalsources.com/vietnam
-- Bangladesh: bgmea.com.bd (garments), lightcastlebd.com
-- Mexico: mexproduct.com (nearshore to US, USMCA duty-free)
-- Turkey: turktrade.org.tr (proximity to EU, lower cost)
-- Morocco: amdie.gov.ma (proximity to EU, FTA with EU)
-- Verify suppliers: alibaba.com's Trade Assurance, SGS inspection (sgs.com), Bureau Veritas (bureauveritas.com)
-- Calculate total landed cost including freight, duties, GST/VAT/import tax in target market
+**3. COST-EFFECTIVE SOURCING FOR THE SPECIFIED MARKET**
+What are the cheapest compliant sourcing options for products sold into the specified market? Name the key supplier platforms and import channels relevant to that market, applicable FTA duty savings, and how to verify supplier quality and compliance.
 
-**4. E-COMMERCE & PLATFORM CHANNELS**
-- Amazon: sellercentral.amazon.com (global)
-- eBay: ebay.com/sellercenter
-- Etsy: etsy.com/sell (handmade, vintage)
-- Shopify store: shopify.com
-- TikTok Shop: seller.tiktokglobalshop.com (fastest growing globally)
-- Local platforms by region: tmall.com (China), flipkart.com (India), lazada.com (SE Asia), mercadolibre.com (Latin America), takealot.com (South Africa)
-- B2B platforms: alibaba.com, thomasnet.com, europages.com
+**4. E-COMMERCE & PLATFORM CHANNELS FOR THE SPECIFIED MARKET**
+What are the most relevant e-commerce platforms and marketplace channels for the specified market? Name the dominant local platforms, relevant social commerce channels, and B2B options. Include seller registration steps.
 
 **5. LOW-COMPETITION PLATFORM NICHES**
 2-3 specific marketplace or cross-border e-commerce opportunities that are underserved globally. Name them.
@@ -873,13 +802,8 @@ Draw the full value chain for this business. What parts are currently owned by d
 **2. STEP-BY-STEP STARTUP ROADMAP**
 Integrated businesses are built in stages. Name the anchor business and which adjacencies to build next, and when.
 
-**3. CHEAPEST COMPLIANT INTEGRATED SOURCING**
-Where globally can each link in the value chain be sourced most cheaply while remaining compliant?
-- Raw inputs: compare global commodity sources with tariff implications
-- Processing: compare regions on energy cost, labour cost, regulatory environment
-- Distribution: compare logistics costs and infrastructure across markets
-- Technology backbone: compare ERP systems (sap.com, oracle.com/erp, odoo.com for lower cost)
-- Use alibaba.com, indiamart.com for component sourcing
+**3. LOWEST-COST INTEGRATED VALUE CHAIN FOR THE SPECIFIED MARKET**
+What are the cheapest compliant options for each link in the value chain in the specified market? Name local suppliers for key inputs, cost-effective ERP and technology backbone options, and relevant import channels for components not available locally.
 
 **4. INTEGRATED BUSINESS MODELS**
 - Energy + manufacturing: use cheap energy to power manufacturing advantage
@@ -935,25 +859,14 @@ What is the current industry average cost structure? Where is the waste? Show ma
 **2. STEP-BY-STEP ACQUISITION / STARTUP ROADMAP**
 If acquisition: find, finance, buy, 100-day improvement plan. If startup: launch lean, prove unit economics, then scale. Be numbered and specific.
 
-**3. CHEAPEST COMPLIANT OPERATING COST STRUCTURE**
-How do you build the lowest-cost compliant operation in this business?
-- Labour: compare markets, consider automation, compare union vs. non-union environments
-- Technology: open source alternatives to expensive software (name specific open source tools vs. paid alternatives)
-- Facilities: compare industrial property costs across regions, co-working/shared space, remote-first
-- Sourcing: global input sourcing (alibaba.com, indiamart.com) vs. local — show the cost delta
-- Zero-based budgeting: justify every cost from zero each cycle — template at corporatefinanceinstitute.com
-- Automation tools: zapier.com, make.com, n8n.io (open source automation), uipath.com for RPA
+**3. LOWEST-COST COMPLIANT OPERATIONS IN THE SPECIFIED MARKET**
+How do you build the lowest-cost compliant operation in the specified market? Name: open-source alternatives to expensive software, automation tools (zapier.com, make.com, n8n.io, uipath.com), zero-based budgeting resources, and the lowest-cost compliant labour model in that market.
 
 **4. SME ACQUISITION & ROLL-UP STRATEGY**
-How to find and buy underperforming businesses globally:
-- US: bizbuysell.com, businessbroker.net, sunbeltnetwork.com
-- UK: businessesforsale.com, daltonsbusiness.com, rightbiz.co.uk
-- Australia: businessforsale.com.au, seek.com.au/businesses-for-sale, businesses.com.au
-- Global: mergermarket.com, dealsuite.com, axial.net
-- What vendor finance, earn-out, or seller note structures minimise acquisition capital?
+How to find and buy underperforming businesses in the specified market? Name the relevant business broker platforms, marketplaces, and broker associations for that market. What vendor finance, earn-out, or seller note structures minimise acquisition capital?
 
-**5. FRAGMENTED INDUSTRIES RIPE FOR ROLL-UP**
-2-3 globally applicable fragmented industries where consolidation and operational improvement creates value. Name them.
+**5. FRAGMENTED INDUSTRIES RIPE FOR ROLL-UP IN THE SPECIFIED MARKET**
+2-3 fragmented industries in the specified market where consolidation and operational improvement creates value. Name them specifically.
 
 **6. TOOLS, WEBSITES & PLATFORMS (with real URLs)**
 - Business acquisition: bizbuysell.com, businessesforsale.com, axial.net
@@ -999,20 +912,11 @@ What regulatory complexity in this business scares away most competitors? Show h
 **2. STEP-BY-STEP REGULATORY ROADMAP**
 Name every regulator, every licence, every approval in sequence. Be specific about timeline and cost. Show the path through the complexity.
 
-**3. CHEAPEST COMPLIANT REGULATORY NAVIGATION**
-Where globally is the cheapest compliant way to enter this regulated sector?
-- Compare regulatory environments: UK (FCA), EU (EBA/ESMA), US (state-by-state), Singapore (MAS), UAE (ADGM/DIFC), Australia (ASIC/APRA)
-- Which jurisdiction has the fastest, cheapest regulatory pathway?
-- Regulatory sandbox programs: FCA Regulatory Sandbox (fca.org.uk/firms/innovation), MAS Fintech Sandbox (mas.gov.sg), ASIC Innovation Hub (asic.gov.au/innovation-hub), ADGM (adgm.com)
-- Which free trade agreements reduce cross-border regulatory burden?
-- Cheapest compliant legal counsel: compare law firm rates across jurisdictions, use legalzoom.com or seedlegals.com for standard documents
+**3. REGULATORY ENTRY PATHWAY FOR THE SPECIFIED MARKET**
+What is the cheapest compliant regulatory entry pathway in the specified market? Name the exact regulator, the exact licence class, the timeline, cost estimate, and whether any regulatory sandbox or innovation hub applies in that market.
 
-**4. EMERGING MARKET OPPORTUNITIES**
-- Where globally are regulations newest, least understood by competitors, and most navigable with the right relationships?
-- ASEAN emerging markets (Vietnam, Indonesia, Philippines): investment law, foreign ownership rules
-- Africa: fast-growing markets with underdeveloped regulation — identify specific sectors
-- Middle East: DIFC (Dubai), ADGM (Abu Dhabi) — common law, low tax, international recognition
-- Latin America: Brazil, Mexico, Colombia — large markets, complex but navigable
+**4. REGULATORY MOAT OPPORTUNITIES IN THE SPECIFIED MARKET**
+Which specific regulated sectors in the specified market have the highest complexity-to-competition ratio? Where are the regulations newest or least understood, creating first-mover advantage for those who navigate them?
 
 **5. LOW-COMPETITION REGULATORY NICHES**
 2-3 globally applicable regulated sectors where complexity has driven away most competitors. Name them with specific regulatory thresholds and how to meet them.
@@ -1064,14 +968,12 @@ Are the other directors citing successful examples while ignoring the 95% that f
 **3. CAPITAL TRAP**
 Is the capital estimate wildly optimistic? Name 5 hidden costs no one mentioned: regulatory compliance, currency risk, customer acquisition cost, staff turnover, slow receivables, insurance, logistics blowouts. Give realistic revised numbers.
 
-**4. GLOBAL SOURCING RISKS**
-The directors talked about cheap global sourcing — what are the risks?
-- Quality control failure at low-cost manufacturers (name specific cases)
-- Currency exchange risk eating the arbitrage
-- Geopolitical supply chain disruption (name specific current risks)
-- Compliance failure: cheap source that fails destination market standards
-- IP theft risk in certain manufacturing jurisdictions
-- Lead time and minimum order quantity traps
+**4. SOURCING & SUPPLY CHAIN RISKS**
+What are the hidden risks in the sourcing or supply chain strategy the other directors recommended for this market?
+- Quality control failure risks
+- Currency and cost blow-out risks
+- Regulatory non-compliance risks (products or services that don't meet the specified market's standards)
+- Concentration risk: single supplier failure, lead time blow-outs, minimum order quantity traps
 
 **5. REGULATORY TRAP**
 What specific regulatory hurdle in the target market could kill this before launch? Name the exact regulator, the exact rule, the realistic timeline and cost. Reference official regulatory websites.
