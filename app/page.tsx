@@ -21,7 +21,10 @@ export default function Home() {
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [done, setDone] = useState(false);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+  const [consensusPlan, setConsensusPlan] = useState<string | null>(null);
+  const [consensusLoading, setConsensusLoading] = useState(false);
   const resultsRef = useRef<HTMLDivElement>(null);
+  const consensusRef = useRef<HTMLDivElement>(null);
 
   const toggleExpand = (id: string) => {
     setExpandedIds((prev) => {
@@ -38,6 +41,8 @@ export default function Home() {
     setResponses({});
     setDone(false);
     setExpandedIds(new Set());
+    setConsensusPlan(null);
+    setConsensusLoading(false);
 
     const fullQuestion = `${question}${sector ? ` [Sector: ${sector}]` : ""} — Market focus: ${market}.`;
 
@@ -54,13 +59,13 @@ export default function Home() {
           body: JSON.stringify({ question: fullQuestion, directorId: director.id }),
         });
         const data = await res.json();
-        const text = data.response || "No response received.";
+        const text = data.response || `⚠️ Error: ${data.error || "No response received."}`;
         collectedResponses[director.id] = text;
         setResponses((prev) => ({ ...prev, [director.id]: text }));
-      } catch {
-        const err = "Unable to connect — check ANTHROPIC_API_KEY in Vercel settings.";
-        collectedResponses[director.id] = err;
-        setResponses((prev) => ({ ...prev, [director.id]: err }));
+      } catch (e) {
+        const text = `⚠️ Network error — check your connection and ANTHROPIC_API_KEY in Vercel settings. (${e instanceof Error ? e.message : e})`;
+        collectedResponses[director.id] = text;
+        setResponses((prev) => ({ ...prev, [director.id]: text }));
       }
     }
 
@@ -73,14 +78,30 @@ export default function Home() {
         body: JSON.stringify({ question: fullQuestion, directorId: opposer.id, previousResponses: allSoFar }),
       });
       const data = await res.json();
-      setResponses((prev) => ({ ...prev, [opposer.id]: data.response || "No response received." }));
-    } catch {
-      setResponses((prev) => ({ ...prev, [opposer.id]: "Unable to connect — check ANTHROPIC_API_KEY in Vercel settings." }));
+      setResponses((prev) => ({ ...prev, [opposer.id]: data.response || `⚠️ Error: ${data.error || "No response received."}` }));
+    } catch (e) {
+      setResponses((prev) => ({ ...prev, [opposer.id]: `⚠️ Network error: ${e instanceof Error ? e.message : e}` }));
     }
 
     setLoadingId(null);
     setRunning(false);
     setDone(true);
+
+    // Generate consensus action plan from all responses
+    setConsensusLoading(true);
+    try {
+      const res = await fetch("/api/consensus", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: fullQuestion, responses: collectedResponses, market }),
+      });
+      const data = await res.json();
+      setConsensusPlan(data.plan || `⚠️ ${data.error || "Could not generate action plan."}`);
+    } catch (e) {
+      setConsensusPlan(`⚠️ Network error generating action plan: ${e instanceof Error ? e.message : e}`);
+    } finally {
+      setConsensusLoading(false);
+    }
   }, [question, sector, market, running]);
 
   // Auto-scroll to results when all done
@@ -89,6 +110,13 @@ export default function Home() {
       setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 200);
     }
   }, [done]);
+
+  // Auto-scroll to consensus when it arrives
+  useEffect(() => {
+    if (consensusPlan && consensusRef.current) {
+      setTimeout(() => consensusRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 200);
+    }
+  }, [consensusPlan]);
 
   const regular = DIRECTORS.filter((d) => !d.isOpposer);
   const opposer = DIRECTORS.find((d) => d.isOpposer)!;
@@ -383,8 +411,72 @@ export default function Home() {
         </div>
       )}
 
+      {/* ====== BOARD CONSENSUS ACTION PLAN ====== */}
+      {(consensusLoading || consensusPlan) && (
+        <div ref={consensusRef} className="max-w-5xl mx-auto px-4 pb-16">
+          <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid #22c55e44" }}>
+            <div className="px-6 py-4 flex items-center gap-3" style={{ background: "linear-gradient(135deg, #061206, #081508)", borderBottom: "1px solid #22c55e22" }}>
+              <span style={{ fontSize: 22 }}>🎯</span>
+              <div>
+                <h2 className="text-xl font-bold" style={{ color: "#e2e2f0" }}>Board Consensus — Step-by-Step Action Plan</h2>
+                <p className="text-xs mt-0.5" style={{ color: "#7777aa" }}>
+                  Synthesised from all 18 director analyses · Market: {market}
+                </p>
+              </div>
+              {consensusLoading && (
+                <span className="ml-auto text-xs animate-pulse" style={{ color: "#22c55e" }}>Synthesising board consensus…</span>
+              )}
+            </div>
+
+            <div className="px-6 py-6" style={{ background: "#07100a" }}>
+              {consensusLoading && !consensusPlan && (
+                <div className="space-y-3">
+                  {[1, 2, 3, 4, 5].map(i => (
+                    <div key={i} className="shimmer h-4 rounded" style={{ width: `${70 + i * 5}%` }} />
+                  ))}
+                </div>
+              )}
+              {consensusPlan && (
+                <div className="space-y-1">
+                  {consensusPlan.split("\n").map((line, i) => {
+                    if (!line.trim()) return <div key={i} className="h-2" />;
+                    const isH2 = line.trim().startsWith("**") && line.trim().endsWith("**");
+                    const isBullet = /^[-•*]\s/.test(line.trim());
+                    const isNumbered = /^\d+[.)]\s/.test(line.trim());
+
+                    if (isH2) {
+                      return (
+                        <p key={i} className="font-bold text-sm mt-4 mb-2 pt-2" style={{ color: "#4ade80", borderTop: "1px solid #22c55e22" }}>
+                          {line.replace(/\*\*/g, "")}
+                        </p>
+                      );
+                    }
+                    if (isBullet || isNumbered) {
+                      const num = isNumbered ? line.match(/^\d+/)?.[0] : null;
+                      return (
+                        <div key={i} className="flex gap-3 text-sm mb-2" style={{ color: "#cceecc" }}>
+                          <span className="flex-shrink-0 font-semibold" style={{ color: "#4ade80", minWidth: 20 }}>
+                            {isNumbered ? `${num}.` : "▸"}
+                          </span>
+                          <span>{line.replace(/^[-•*]\s/, "").replace(/^\d+[.)]\s/, "")}</span>
+                        </div>
+                      );
+                    }
+                    return (
+                      <p key={i} className="text-sm leading-relaxed" style={{ color: "#aaccaa" }}>
+                        {line}
+                      </p>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="text-center py-6" style={{ borderTop: "1px solid #252540", color: "#444466" }}>
-        <p className="text-xs">Global Business Board of Directors · Powered by Claude AI · Australia-Focused</p>
+        <p className="text-xs">Global Business Board of Directors · Powered by Claude AI · {market}-Focused</p>
       </div>
     </main>
   );
